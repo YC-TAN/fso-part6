@@ -1,3 +1,5 @@
+import { createSlice } from '@reduxjs/toolkit'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -19,41 +21,29 @@ const asObject = anecdote => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const anecdoteReducer = (state = initialState, action) => {
-  switch(action.type) {
-    case 'NEW_ANECDOTE': {
-      return [...state, action.payload]
-    }
-    case 'VOTE':{
-      const id = action.payload.id
-      const voteAnecdote = state.find(a => a.id === id)
-      const updatedAnecdote = {...voteAnecdote, votes: voteAnecdote.votes + 1}
-      return state.map(a => a.id === id ? updatedAnecdote : a)
-    }
-    default:
-      return state
-  }
-}
-
-export const updateVote = (id) => {
-  return ({
-    type: 'VOTE',
-    payload: {
-      id
-    }
-  })
-}
-
-export const createAnecdote = (content) => {
-  return {
-    type: "NEW_ANECDOTE",
-    payload: {
-      content,
-      votes: 0,
-      id: getId(),
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    createAnecdote(state, action) {
+      const content = action.payload
+      // this uses push onto the newly returned state
+      // underlying uses Immer library so it is still immutable
+      state.push({
+        content,
+        votes: 0,
+        id: getId()
+      })
     },
-  };
-};
+    updateVote(state, action){
+      const id = action.payload
+      const anecdoteChange = state.find(a => a.id === id)
+      const changedAnecdote = { ...anecdoteChange, votes: anecdoteChange.votes + 1}
+      return state.map(a => a.id === id ? changedAnecdote : a)
+    }
+  }
+})
 
+export const {createAnecdote, updateVote} = anecdoteSlice.actions
 
-export default anecdoteReducer
+export default anecdoteSlice.reducer
