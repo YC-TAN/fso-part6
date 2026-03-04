@@ -6,8 +6,6 @@ import AnecdoteForm from "./components/AnecdoteForm";
 import Filter from "./components/Filter";
 import Notification from "./components/Notification";
 import { initializeAnecdotes } from "./reducers/anecdoteReducer";
-import { setAnecdotes } from "./reducers/anecdoteReducer";
-import anecdoteService from "./services/anecdotes";
 
 const App = () => {
   const dispatch = useDispatch();
