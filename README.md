@@ -5,4 +5,5 @@ State management
 3. Redux toolkit
 4. React Query/ tanstack query
 5. useReducer, useContext
-6. React router
+
+React router
